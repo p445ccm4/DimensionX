@@ -37,8 +37,8 @@ from huggingface_hub import hf_hub_download, snapshot_download
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
-hf_hub_download(repo_id="ai-forever/Real-ESRGAN", filename="RealESRGAN_x4.pth", local_dir="model_real_esran")
-snapshot_download(repo_id="AlexWortega/RIFE", local_dir="model_rife")
+hf_hub_download(repo_id="ai-forever/Real-ESRGAN", filename="RealESRGAN_x4.pth", local_dir="models/model_real_esran")
+snapshot_download(repo_id="AlexWortega/RIFE", local_dir="models/model_rife")
 
 pipe = CogVideoXPipeline.from_pretrained("THUDM/CogVideoX-5b", torch_dtype=torch.bfloat16).to(device)
 pipe.scheduler = CogVideoXDPMScheduler.from_config(pipe.scheduler.config, timestep_spacing="trailing")
@@ -54,9 +54,9 @@ pipe_image = CogVideoXImageToVideoPipeline.from_pretrained(
     text_encoder=pipe.text_encoder,
     torch_dtype=torch.bfloat16,
 )
-lora_path = "your_lora_path"
+lora_path = "./models"
 lora_rank = 256
-pipe_image.load_lora_weights(lora_path, weight_name="pytorch_lora_weights.safetensors", adapter_name="test_1")
+pipe_image.load_lora_weights(lora_path, weight_name="orbit_left_lora_weights.safetensors", adapter_name="test_1")
 pipe_image.fuse_lora(lora_scale=1 / lora_rank)
 pipe_image = pipe_image.to(device)
 
@@ -69,8 +69,8 @@ pipe_image = pipe_image.to(device)
 os.makedirs("./output", exist_ok=True)
 os.makedirs("./gradio_tmp", exist_ok=True)
 
-upscale_model = utils.load_sd_upscale("model_real_esran/RealESRGAN_x4.pth", device)
-frame_interpolation_model = load_rife_model("model_rife")
+upscale_model = utils.load_sd_upscale("models/model_real_esran/RealESRGAN_x4.pth", device)
+frame_interpolation_model = load_rife_model("models/model_rife")
 
 sys_prompt = """You are part of a team of bots that creates videos. You work with an assistant bot that will draw anything you say in square brackets.
 
