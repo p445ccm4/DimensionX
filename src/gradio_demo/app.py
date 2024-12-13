@@ -30,7 +30,7 @@ from datetime import datetime, timedelta
 
 from diffusers.image_processor import VaeImageProcessor
 from openai import OpenAI
-import moviepy.editor as mp
+import moviepy as mp
 import utils
 from rife_model import load_rife_model, rife_inference_with_latents
 from huggingface_hub import hf_hub_download, snapshot_download
