@@ -107,6 +107,16 @@ for fuse_component in components:
     continue
 ```
 
+Modify the line as shown when something errors like "no module named moviepy.editor" 
+```python
+import moviepy.editor as mp
+       ^^^^^^^^^^^^^^
+ImportError: no module named "moviepy.editor"
+```
+solve this by modifying to:
+```python
+import moviepy as mp
+```
 
 
 ## Acknowledgement
