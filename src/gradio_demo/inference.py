@@ -72,8 +72,8 @@ export_to_video(video, video_path_right, fps=16)
 export_to_video(video_flipped, video_path_left, fps=16)
 
 # Load the video, flip it horizontally, and save
-clip_left = mp.VideoFileClip(video_path_left).with_effects([mp.vfx.MirrorX(), mp.vfx.TimeMirror()]).subclipped(0, -1)
-clip_right = mp.VideoFileClip(video_path_right)
+clip_left = mp.VideoFileClip(video_path_left).with_effects([mp.vfx.MirrorX(), mp.vfx.TimeMirror()]).subclipped(0.53, -1)
+clip_right = mp.VideoFileClip(video_path_right).subclipped(0, 1.53)
 
 # Concatenate the flipped video with the other video
 final_clip = mp.concatenate_videoclips([clip_left, clip_right])
