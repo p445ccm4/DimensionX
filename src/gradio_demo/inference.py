@@ -4,7 +4,7 @@ from diffusers.utils import export_to_video, load_image
 from PIL import Image
 import moviepy as mp
 import argparse
-import utils
+import src.gradio_demo.utils as utils
 from rife_model import load_rife_model, rife_inference_with_latents
 from diffusers.image_processor import VaeImageProcessor
 
@@ -52,12 +52,13 @@ video_flipped = pipe(
     num_inference_steps=50,
     guidance_scale=7.0,
 ).frames
-if args.scale:
-# if True:
+# if args.scale:
+if True:
+    # video.shape = (1, 49, 3, 480, 720) [n, f, c, h, w]
     video = utils.upscale_batch_and_concatenate(upscale_model, video, device)
     video_flipped = utils.upscale_batch_and_concatenate(upscale_model, video_flipped, device)
-if args.interpolate:
-# if True:
+# if args.interpolate:
+if True:
     video = rife_inference_with_latents(frame_interpolation_model, video)
     video_flipped = rife_inference_with_latents(frame_interpolation_model, video_flipped)
 
@@ -80,7 +81,7 @@ final_clip = mp.concatenate_videoclips([clip_left, clip_right])
 
 # Export the final concatenated video
 final_clip.write_videofile(output_video_path)
-final_clip.write_gif(output_video_path.replace(".mp4", ".gif"), fps=16)
+# final_clip.write_gif(output_video_path.replace(".mp4", ".gif"), fps=16)
 
 # Clean up temporary files
 clip_left.close()

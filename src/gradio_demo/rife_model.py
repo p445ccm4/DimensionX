@@ -2,12 +2,12 @@ import torch
 from diffusers.image_processor import VaeImageProcessor
 from torch.nn import functional as F
 import cv2
-import utils
-from rife.pytorch_msssim import ssim_matlab
+import src.gradio_demo.utils as utils
+from src.gradio_demo.rife.pytorch_msssim import ssim_matlab
 import numpy as np
 import logging
 import skvideo.io
-from rife.RIFE_HDv3 import Model
+from src.gradio_demo.rife.RIFE_HDv3 import Model
 from huggingface_hub import hf_hub_download, snapshot_download
 logger = logging.getLogger(__name__)
 
