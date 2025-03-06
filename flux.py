@@ -12,10 +12,10 @@ class Flux():
         image = self.pipe(
             prompt=prompt,
             negative_prompt="blurry, low quality, human, people, logo, watermark",
-            num_inference_steps=50, 
+            num_inference_steps=40, 
             guidance_scale=30.0,
-            width=1280, 
-            height=720,
+            width=720, 
+            height=480,
         ).images[0]
 
         return image

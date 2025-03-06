@@ -1,6 +1,7 @@
+import os
 import torch
 from diffusers import CogVideoXImageToVideoPipeline
-from diffusers.utils import export_to_video, load_image
+from diffusers.utils import export_to_video
 from PIL import Image
 import moviepy as mp
 import argparse
@@ -48,6 +49,8 @@ class DimensonX:
         if interpolate:
             video = rife_inference_with_latents(self.frame_interpolation_model, video)
             video = rife_inference_with_latents(self.frame_interpolation_model, video)
+            video = rife_inference_with_latents(self.frame_interpolation_model, video)
+            video_flipped = rife_inference_with_latents(self.frame_interpolation_model, video_flipped)
             video_flipped = rife_inference_with_latents(self.frame_interpolation_model, video_flipped)
             video_flipped = rife_inference_with_latents(self.frame_interpolation_model, video_flipped)
 
@@ -57,11 +60,11 @@ class DimensonX:
 
         video_numpy = self.vae_processor.pt_to_numpy(video[0])
         video_pil = self.vae_processor.numpy_to_pil(video_numpy)
-        export_to_video(video_pil, video_path_right, fps=16)
+        export_to_video(video_pil, video_path_right, fps=32)
 
         video_flipped_numpy = self.vae_processor.pt_to_numpy(video_flipped[0])
         video_flipped_pil = self.vae_processor.numpy_to_pil(video_flipped_numpy)
-        export_to_video(video_flipped_pil, video_path_left, fps=16)
+        export_to_video(video_flipped_pil, video_path_left, fps=32)
 
 
         # Load the video, flip it horizontally, and save
@@ -73,13 +76,13 @@ class DimensonX:
 
         # Export the final concatenated video
         final_clip.write_videofile(output_video_path, fps=16)
-        # final_clip.write_gif(output_video_path.replace(".mp4", ".gif"), fps=16)
 
         # Clean up temporary files
         clip_left.close()
         clip_right.close()
         final_clip.close()
-
+        os.remove(video_path_left)
+        os.remove(video_path_right)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Generate video from image using CogVideoX")
